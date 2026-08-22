@@ -39,6 +39,8 @@
 - `chore: ESLint FSD 레이어 경계 규칙 구성`: eslint-plugin-boundaries로
   CLAUDE.md의 레이어 규칙을 lint로 강제하는 설정 위임. v7 문법 마이그레이션은
   공식 문서 확인 후 진행
+- `chore: Vitest와 openapi 타입 생성 파이프라인 구성`: Vitest, Testing Library
+  셋업과 openapi-typescript 기반 gen:api 스크립트 구성 위임
 
 ## 사람이 최종 검증한 내용
 
@@ -61,3 +63,6 @@
   import, 같은 레이어 슬라이스 간 import, index.ts 우회 깊은 경로 import)이
   실제로 잡히는지 임시 파일로 확인. typescript-eslint가 TS 7 미지원이라
   TS 6 고정 결정
+- `chore: Vitest와 openapi 타입 생성 파이프라인 구성`: 임시 스모크 테스트로
+  jsdom과 RTL 렌더 경로 동작 확인 후 제거, 생성 타입이 typecheck와 lint를
+  통과하는지 확인. 완료 기준 3종 게이트(typecheck, lint, test:run) 전부 동작
