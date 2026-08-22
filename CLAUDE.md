@@ -2,7 +2,8 @@
 
 프론트엔드 과제로 만드는 SPA. 로그인, 대시보드, 할 일 목록(가상 스크롤과 무한 스크롤),
 상세와 삭제, 회원정보까지 5개 페이지로 구성된다.
-백엔드 없이 MSW 목 서버로 동작한다. API 계약은 `openapi.yaml`이 단일 진리다.
+백엔드 없이 MSW 목 서버로 동작한다. API 계약은 `spec/openapi.yaml`이 단일 진리다.
+회사 제공 문서 2개는 `spec/`에 두고 수정하지 않는다.
 
 ## 스택
 
@@ -27,10 +28,10 @@ pnpm test:run     테스트 1회 실행
 pnpm typecheck    타입 검사
 pnpm lint         ESLint. FSD 레이어 경계 검사 포함
 pnpm build        프로덕션 빌드
-pnpm gen:api      openapi.yaml 에서 타입 재생성
+pnpm gen:api      spec/openapi.yaml 에서 타입 재생성
 ```
 
-`openapi.yaml`이 바뀌면 `pnpm gen:api`를 먼저 돌린다.
+`spec/openapi.yaml`이 바뀌면 `pnpm gen:api`를 먼저 돌린다.
 생성된 타입 파일은 직접 수정하지 않는다.
 
 ## 완료 기준
@@ -79,7 +80,7 @@ features/delete-task/
 ## 범위
 
 - 요구사항에 없는 기능을 추가하지 않는다. 필요해 보이면 먼저 묻는다
-- `openapi.yaml`에 없는 엔드포인트를 지어내지 않는다
+- `spec/openapi.yaml`에 없는 엔드포인트를 지어내지 않는다
 - 라이브러리를 추가하기 전에 README의 설계 결정 섹션에 근거를 먼저 쓴다
 
 ## 코드 규약
