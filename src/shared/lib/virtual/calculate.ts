@@ -16,8 +16,31 @@ export interface RenderWindow {
 
 export const DEFAULT_OVERSCAN = 5
 
-// red 단계 스텁. 스펙은 calculate.test.ts, 구현은 green 커밋에서
 export function calculateRenderWindow(input: RenderWindowInput): RenderWindow {
-  void input
-  throw new Error('미구현: green 커밋에서 구현')
+  const { viewportHeight, itemHeight, itemCount } = input
+  const overscan = input.overscan ?? DEFAULT_OVERSCAN
+  const totalHeight = itemCount * itemHeight
+
+  if (itemCount === 0) {
+    return { startIndex: 0, endIndex: 0, offsetY: 0, totalHeight: 0 }
+  }
+
+  // 삭제로 목록이 줄어든 직후 남아 있는 스크롤 위치를 유효 범위로 되돌린다
+  const maxScrollTop = Math.max(0, totalHeight - viewportHeight)
+  const scrollTop = Math.min(Math.max(0, input.scrollTop), maxScrollTop)
+
+  // 높이가 고정이라 시작 인덱스는 이진 탐색 없이 나눗셈 한 번
+  const firstVisibleIndex = Math.floor(scrollTop / itemHeight)
+  const startIndex = Math.max(0, firstVisibleIndex - overscan)
+  const endIndex = Math.min(
+    itemCount,
+    Math.ceil((scrollTop + viewportHeight) / itemHeight) + overscan,
+  )
+
+  return {
+    startIndex,
+    endIndex,
+    offsetY: startIndex * itemHeight,
+    totalHeight,
+  }
 }
