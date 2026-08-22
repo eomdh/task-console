@@ -30,6 +30,9 @@
   논의하고 반영 요청
 - `docs: 제공 문서 spec 디렉토리로 이동`: 제공 문서 격리 배치를 제안하고
   장단점 검토 요청, 전체 디렉토리 구조안 작성 요청
+- `chore: Vite React TypeScript 스캐폴드 구성`: 비어 있지 않은 디렉토리라
+  템플릿 생성기 대신 파일 직접 작성 위임. TS 7에서 baseUrl 제거 이슈를
+  AI가 수정
 
 ## 사람이 최종 검증한 내용
 
@@ -45,3 +48,4 @@
 - `docs: 제공 문서 spec 디렉토리로 이동`: git rename 추적과 문서 내 경로 참조
   갱신 확인. FSD 디렉토리 구조안(코드 기반 라우팅, 생성 타입 예외, mocks
   레이어 밖 배치, 회원정보 경로 /user)을 검토 후 승인
+- `chore: Vite React TypeScript 스캐폴드 구성`: typecheck와 build 통과 확인
