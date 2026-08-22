@@ -38,6 +38,7 @@ export default tseslint.config(
         typescript: { alwaysTryTypes: true },
       },
       'boundaries/include': ['src/**/*'],
+      'boundaries/files': [{ pattern: '**/*.test.{ts,tsx}', category: 'test' }],
       'boundaries/elements': [
         { type: 'app', pattern: 'src/app' },
         { type: 'pages', pattern: 'src/pages/*', capture: ['slice'] },
@@ -83,6 +84,8 @@ export default tseslint.config(
             { from: { element: { type: 'entities' } }, allow: [whole('shared')] },
             { from: { element: { type: 'mocks' } }, allow: [whole('shared')] },
             { from: { element: { type: 'test' } }, allow: [whole('mocks'), whole('shared')] },
+            // 테스트 파일은 위치와 무관하게 목 서버를 다룰 수 있다 (핸들러 오버라이드)
+            { from: { file: { categories: 'test' } }, allow: [whole('mocks')] },
           ],
         },
       ],
