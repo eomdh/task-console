@@ -10,7 +10,8 @@ const sliced = (type) => ({ to: { element: { type, fileInternalPath: 'index.ts' 
 const whole = (type) => ({ to: { element: { type } } })
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage'] },
+  // public/mockServiceWorker.js는 msw init 생성물이라 lint 대상에서 뺀다
+  { ignores: ['dist', 'coverage', 'public/mockServiceWorker.js'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
