@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import '@/app/styles/index.css'
 
 // 라우터 도입 전까지의 최소 진입점. 라우터 셸 커밋에서 교체한다.
 const rootElement = document.getElementById('root')

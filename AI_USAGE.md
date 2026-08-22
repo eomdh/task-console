@@ -33,6 +33,9 @@
 - `chore: Vite React TypeScript 스캐폴드 구성`: 비어 있지 않은 디렉토리라
   템플릿 생성기 대신 파일 직접 작성 위임. TS 7에서 baseUrl 제거 이슈를
   AI가 수정
+- `build: Tailwind 토큰과 Pretendard 폰트 구성`: 색상 토큰 세트 선정과
+  전역 스타일 작성 위임. 토큰 명명은 requirement 예시(primary, disabled)
+  기준으로 지시
 
 ## 사람이 최종 검증한 내용
 
@@ -49,3 +52,5 @@
   갱신 확인. FSD 디렉토리 구조안(코드 기반 라우팅, 생성 타입 예외, mocks
   레이어 밖 배치, 회원정보 경로 /user)을 검토 후 승인
 - `chore: Vite React TypeScript 스캐폴드 구성`: typecheck와 build 통과 확인
+- `build: Tailwind 토큰과 Pretendard 폰트 구성`: 빌드 산출 CSS에 토큰과
+  폰트 포함 확인, 텍스트 색 명암비 4.5:1 이상 확인

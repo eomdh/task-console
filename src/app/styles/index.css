@@ -1,0 +1,32 @@
+/* Pretendard는 CSS 명세상 @import가 다른 구문보다 먼저 와야 해서 최상단에 둔다 */
+@import 'pretendard/dist/web/variable/pretendardvariable.css';
+@import 'tailwindcss';
+
+/*
+ * 색상 토큰. 하드코딩 금지, 컴포넌트는 이 토큰의 유틸리티만 쓴다.
+ * 텍스트 색은 흰 배경 기준 명암비 4.5:1 이상으로 선정.
+ */
+@theme {
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+
+  --color-primary: #2563eb;
+  --color-primary-strong: #1d4ed8;
+  --color-ink: #1f2937;
+  --color-muted: #6b7280;
+  --color-surface: #ffffff;
+  --color-surface-weak: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-danger: #dc2626;
+  --color-disabled: #9ca3af;
+}
+
+@layer base {
+  body {
+    @apply bg-surface font-sans text-ink;
+  }
+
+  /* 포커스 링은 전역 한 곳에서. 컴포넌트가 outline을 지우지 않는다 */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}
