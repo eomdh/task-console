@@ -36,6 +36,9 @@
 - `build: Tailwind 토큰과 Pretendard 폰트 구성`: 색상 토큰 세트 선정과
   전역 스타일 작성 위임. 토큰 명명은 requirement 예시(primary, disabled)
   기준으로 지시
+- `chore: ESLint FSD 레이어 경계 규칙 구성`: eslint-plugin-boundaries로
+  CLAUDE.md의 레이어 규칙을 lint로 강제하는 설정 위임. v7 문법 마이그레이션은
+  공식 문서 확인 후 진행
 
 ## 사람이 최종 검증한 내용
 
@@ -54,3 +57,7 @@
 - `chore: Vite React TypeScript 스캐폴드 구성`: typecheck와 build 통과 확인
 - `build: Tailwind 토큰과 Pretendard 폰트 구성`: 빌드 산출 CSS에 토큰과
   폰트 포함 확인, 텍스트 색 명암비 4.5:1 이상 확인
+- `chore: ESLint FSD 레이어 경계 규칙 구성`: 위반 케이스 3종(하위가 상위
+  import, 같은 레이어 슬라이스 간 import, index.ts 우회 깊은 경로 import)이
+  실제로 잡히는지 임시 파일로 확인. typescript-eslint가 TS 7 미지원이라
+  TS 6 고정 결정
