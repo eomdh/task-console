@@ -55,7 +55,7 @@ export function DashboardStats() {
   return (
     <dl className="grid gap-4 sm:grid-cols-3">
       <MetricCard label="일" value={data.numOfTask} icon={ClipboardList} iconClassName="text-accent" />
-      <MetricCard label="해야할 일" value={data.numOfRestTask} icon={Circle} iconClassName="text-warn" />
+      <MetricCard label="해야할 일" value={data.numOfRestTask} icon={Circle} iconClassName="text-ink-soft" />
       <MetricCard label="한 일" value={data.numOfDoneTask} icon={CircleCheck} iconClassName="text-good" />
     </dl>
   )

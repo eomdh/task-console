@@ -50,4 +50,10 @@
   [role='button']:not([aria-disabled='true']) {
     cursor: pointer;
   }
+
+  /* 기본 스크롤바가 너무 진해서 중간 그레이 토큰으로 얇게 통일한다 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-disabled) transparent;
+  }
 }
