@@ -1,13 +1,22 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { RouterProvider } from '@tanstack/react-router'
 import '@/app/styles/index.css'
+import { configureHttp } from '@/shared/lib/http'
+import { router } from '@/app/router'
 
 // [데모 환경] 실제 백엔드가 없어 프로덕션 빌드에서도 MSW worker를 기동한다.
 // 실제 서비스라면 이 코드 자체가 존재하지 않는다.
 const { worker } = await import('@/mocks/browser')
 await worker.start({ onUnhandledRequest: 'bypass' })
 
-// 라우터 도입 전까지의 최소 진입점. 라우터 셸 커밋에서 교체한다.
+// 세션 만료 시 이동할 곳은 app 레이어가 정한다
+configureHttp({
+  onSessionExpired: () => {
+    void router.navigate({ to: '/sign-in' })
+  },
+})
+
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   throw new Error('root 요소가 없습니다')
@@ -15,6 +24,6 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <main>task-console</main>
+    <RouterProvider router={router} />
   </StrictMode>,
 )

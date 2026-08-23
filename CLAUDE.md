@@ -92,6 +92,15 @@ features/delete-task/
 - 색상, 간격, 폰트 크기를 하드코딩하지 않는다. 토큰만 쓴다
 - `any`와 타입 단언으로 타입 오류를 덮지 않는다
 
+### 화면 규칙
+
+- 상단 GNB 아래 `max-w-3xl` 중앙 단일 칼럼
+- 카드와 패널은 `bg-surface` + `border-border` + `rounded-lg`. 그림자를 쓰지 않는다
+- 아이콘은 lucide-react만 쓰고 항상 텍스트 라벨과 함께 둔다
+- 아이콘 배정 (항목 간 중복 금지): 대시보드 `LayoutDashboard`, 할 일 `ListTodo`,
+  로그인 `LogIn`, 회원정보 `CircleUser`, TODO `Circle`, DONE `CircleCheck`,
+  삭제 `Trash2`
+
 ### 프로덕션과 다른 가정
 
 목 서버, 토큰 보관 위치처럼 실제 서비스와 다르게 구현한 부분은
