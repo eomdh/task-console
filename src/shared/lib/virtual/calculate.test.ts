@@ -60,8 +60,9 @@ describe('calculateRenderWindow', () => {
     expect(window.offsetY).toBe(0)
   })
 
-  it('어떤 스크롤 위치에서도 렌더 수가 상한을 넘지 않는다', () => {
+  it('어떤 스크롤 위치에서도 렌더 수가 상한을 넘지 않고 가시 영역을 빠짐없이 덮는다', () => {
     const maxRendered = Math.ceil(base.viewportHeight / base.itemHeight) + 2 * DEFAULT_OVERSCAN + 1
+    const maxScrollTop = base.itemCount * base.itemHeight - base.viewportHeight
     for (let scrollTop = 0; scrollTop <= 50_000; scrollTop += 137) {
       const window = calculateRenderWindow({ ...base, scrollTop })
       expect(window.startIndex).toBeGreaterThanOrEqual(0)
@@ -69,6 +70,17 @@ describe('calculateRenderWindow', () => {
       expect(window.startIndex).toBeLessThanOrEqual(window.endIndex)
       expect(window.offsetY).toBe(window.startIndex * base.itemHeight)
       expect(window.endIndex - window.startIndex).toBeLessThanOrEqual(maxRendered)
+
+      // 상한만 검사하면 "너무 적게 렌더"하는 회귀(빈 화면)를 못 잡는다.
+      // 화면에 걸치는 모든 카드가 윈도우 안에 있어야 한다
+      const effectiveScrollTop = Math.min(scrollTop, maxScrollTop)
+      const firstVisible = Math.floor(effectiveScrollTop / base.itemHeight)
+      const lastVisibleExclusive = Math.min(
+        base.itemCount,
+        Math.ceil((effectiveScrollTop + base.viewportHeight) / base.itemHeight),
+      )
+      expect(window.startIndex).toBeLessThanOrEqual(firstVisible)
+      expect(window.endIndex).toBeGreaterThanOrEqual(lastVisibleExclusive)
     }
   })
 })

@@ -19,11 +19,13 @@ export const DEFAULT_OVERSCAN = 5
 export function calculateRenderWindow(input: RenderWindowInput): RenderWindow {
   const { viewportHeight, itemHeight, itemCount } = input
   const overscan = input.overscan ?? DEFAULT_OVERSCAN
-  const totalHeight = itemCount * itemHeight
 
-  if (itemCount === 0) {
+  // 0이나 음수, NaN이 들어오면 조용히 NaN 윈도우가 퍼지므로 빈 윈도우로 막는다
+  if (!(itemHeight > 0) || !(itemCount > 0)) {
     return { startIndex: 0, endIndex: 0, offsetY: 0, totalHeight: 0 }
   }
+
+  const totalHeight = itemCount * itemHeight
 
   // 삭제로 목록이 줄어든 직후 남아 있는 스크롤 위치를 유효 범위로 되돌린다
   const maxScrollTop = Math.max(0, totalHeight - viewportHeight)

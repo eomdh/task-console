@@ -65,4 +65,38 @@ describe('useVirtualWindow', () => {
     rerender(<Harness itemCount={520} onRender={onRender} />)
     expect(screen.getByTestId('summary')).toHaveTextContent('0-11-52000')
   })
+
+  it('itemCount가 줄면(삭제) 윈도우가 유효 범위로 클램프된다', () => {
+    const { rerender } = render(<Harness itemCount={500} onRender={vi.fn()} />)
+    scrollTo(screen.getByTestId('container'), 10_000)
+    rerender(<Harness itemCount={10} onRender={vi.fn()} />)
+    expect(screen.getByTestId('summary')).toHaveTextContent('0-10-1000')
+  })
+
+  it('컨테이너가 언마운트됐다 다시 붙으면 윈도우가 DOM의 scrollTop과 다시 맞는다', () => {
+    // 에러 화면 전환처럼 훅은 살아 있는데 컨테이너만 갈리는 상황
+    function RemountHarness({ showList }: { showList: boolean }) {
+      const { window: renderWindow, containerProps } = useVirtualWindow({
+        itemCount: 500,
+        itemHeight: 100,
+      })
+      if (!showList) return <p>에러 화면</p>
+      return (
+        <div data-testid="container" {...containerProps}>
+          <p data-testid="summary">
+            {`${renderWindow.startIndex}-${renderWindow.endIndex}-${renderWindow.totalHeight}`}
+          </p>
+        </div>
+      )
+    }
+
+    const { rerender } = render(<RemountHarness showList />)
+    scrollTo(screen.getByTestId('container'), 10_000)
+    expect(screen.getByTestId('summary')).toHaveTextContent('95-111-50000')
+
+    rerender(<RemountHarness showList={false} />)
+    rerender(<RemountHarness showList />)
+    // 재마운트된 DOM의 scrollTop은 0이므로 윈도우도 최상단이어야 한다
+    expect(screen.getByTestId('summary')).toHaveTextContent('0-11-50000')
+  })
 })

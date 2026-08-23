@@ -19,8 +19,12 @@ export interface UseVirtualWindowResult {
 }
 
 function isSameWindow(a: RenderWindow, b: RenderWindow): boolean {
+  // offsetY는 startIndex에서 파생되지만, 그 전제가 깨져도 안전하도록 함께 비교한다
   return (
-    a.startIndex === b.startIndex && a.endIndex === b.endIndex && a.totalHeight === b.totalHeight
+    a.startIndex === b.startIndex &&
+    a.endIndex === b.endIndex &&
+    a.offsetY === b.offsetY &&
+    a.totalHeight === b.totalHeight
   )
 }
 
@@ -40,13 +44,6 @@ export function useVirtualWindow(options: UseVirtualWindowOptions): UseVirtualWi
   })
 
   const onScroll: UIEventHandler<HTMLElement> = (event) => {
-    const previous = calculateRenderWindow({
-      scrollTop: scrollTopRef.current,
-      viewportHeight,
-      itemHeight,
-      itemCount,
-      overscan,
-    })
     scrollTopRef.current = event.currentTarget.scrollTop
     const next = calculateRenderWindow({
       scrollTop: scrollTopRef.current,
@@ -55,16 +52,21 @@ export function useVirtualWindow(options: UseVirtualWindowOptions): UseVirtualWi
       itemCount,
       overscan,
     })
-    if (!isSameWindow(previous, next)) {
+    if (!isSameWindow(renderWindow, next)) {
       forceRender()
     }
   }
 
-  // 뷰포트는 부착 시 1회 측정한다. 창 크기 변경 추적은 범위 밖 (README 한계 참고)
+  // 뷰포트는 부착 시 1회 측정한다. 창 크기 변경 추적은 범위 밖 (README 한계 참고).
+  // 컨테이너가 에러 화면 등으로 언마운트됐다 다시 붙으면 DOM의 scrollTop은 0인데
+  // ref에는 이전 위치가 남아 윈도우가 어긋나므로, 부착 시 ref를 DOM에 맞춘다
   const measureViewport: RefCallback<HTMLElement> = useCallback((element) => {
-    if (element) {
-      setViewportHeight(element.clientHeight)
+    if (!element) return
+    if (scrollTopRef.current !== element.scrollTop) {
+      scrollTopRef.current = element.scrollTop
+      forceRender()
     }
+    setViewportHeight(element.clientHeight)
   }, [])
 
   return {

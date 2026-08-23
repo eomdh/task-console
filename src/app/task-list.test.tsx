@@ -25,29 +25,41 @@ beforeEach(() => {
     accessToken: createToken('demo-user', 60_000),
     refreshToken: createToken('demo-user', 60_000),
   })
+  // jsdom은 레이아웃이 없어 가상 스크롤의 뷰포트 측정을 흉내낸다
+  Object.defineProperty(HTMLElement.prototype, 'clientHeight', {
+    configurable: true,
+    value: 600,
+  })
 })
 
 afterEach(() => {
   tokenStore.clear()
+  Reflect.deleteProperty(HTMLElement.prototype, 'clientHeight')
 })
 
 describe('할 일 목록', () => {
-  it('첫 페이지 20건을 카드로 보여준다', async () => {
+  it('화면에 보일 윈도우만 렌더하고 DOM 노드 수가 상한을 넘지 않는다', async () => {
     renderTaskList()
     expect(await screen.findByText('할 일 1')).toBeInTheDocument()
-    expect(screen.getByText('할 일 20')).toBeInTheDocument()
-    expect(screen.queryByText('할 일 21')).not.toBeInTheDocument()
+
+    // 뷰포트 600px, 행 104px, overscan 5 기준 윈도우 밖 항목은 DOM에 없다
+    expect(screen.queryByText('할 일 12')).not.toBeInTheDocument()
+    const renderedRows = screen.getByTestId('task-scroll').querySelectorAll('li')
+    expect(renderedRows.length).toBeLessThanOrEqual(17)
   })
 
-  it('목록 끝에 도달하면 다음 페이지를 이어 붙인다', async () => {
+  it('목록 끝에 도달하면 다음 페이지를 이어 붙이고 그 위치의 윈도우를 보여준다', async () => {
     renderTaskList()
     await screen.findByText('할 일 1')
 
-    // jsdom은 레이아웃이 없어 스크롤 이벤트만으로 끝 도달로 판정된다
-    fireEvent.scroll(screen.getByTestId('task-scroll'))
+    // 20번째 행 근처로 스크롤한 상태를 만들고 스크롤 이벤트를 발생시킨다
+    const scroll = screen.getByTestId('task-scroll')
+    scroll.scrollTop = 2_080
+    fireEvent.scroll(scroll)
+
     expect(await screen.findByText('할 일 21')).toBeInTheDocument()
-    // 기존 페이지는 유지된다
-    expect(screen.getByText('할 일 1')).toBeInTheDocument()
+    // 앞쪽 항목은 윈도우 밖으로 나가 DOM에서 사라진다 (가상 스크롤)
+    expect(screen.queryByText('할 일 1')).not.toBeInTheDocument()
   })
 
   it('카드를 클릭하면 해당 상세 페이지로 이동한다', async () => {
