@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
 import '@/app/styles/index.css'
 import { configureHttp } from '@/shared/lib/http'
+import { sessionStore } from '@/entities/session'
 import { router } from '@/app/router'
 
 // [데모 환경] 실제 백엔드가 없어 프로덕션 빌드에서도 MSW worker를 기동한다.
@@ -10,9 +11,10 @@ import { router } from '@/app/router'
 const { worker } = await import('@/mocks/browser')
 await worker.start({ onUnhandledRequest: 'bypass' })
 
-// 세션 만료 시 이동할 곳은 app 레이어가 정한다
+// 세션 만료 시 구독자(GNB) 갱신과 이동은 app 레이어가 정한다
 configureHttp({
   onSessionExpired: () => {
+    sessionStore.end()
     void router.navigate({ to: '/sign-in' })
   },
 })

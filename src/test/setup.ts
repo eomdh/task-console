@@ -7,6 +7,8 @@ import { resetTasks } from '@/mocks/seed'
 // 핸들러에 없는 요청은 테스트 작성 오류이므로 즉시 실패시킨다
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' })
+  // jsdom에 없는 scrollTo를 빈 함수로 대체해 라우터 스크롤 복원 소음을 막는다
+  window.scrollTo = () => {}
 })
 
 afterEach(() => {

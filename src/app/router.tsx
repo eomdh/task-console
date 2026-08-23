@@ -7,11 +7,11 @@ import {
 import type { RouterHistory } from '@tanstack/react-router'
 import { tokenStore } from '@/shared/lib/http'
 import { DashboardPage } from '@/pages/dashboard'
-import { SignInPage } from '@/pages/sign-in'
 import { TaskDetailPage } from '@/pages/task-detail'
 import { TaskListPage } from '@/pages/task-list'
 import { UserPage } from '@/pages/user'
 import { RootLayout } from './root-layout'
+import { SignInRouteComponent } from './sign-in-route'
 
 const rootRoute = createRootRoute({ component: RootLayout })
 
@@ -35,7 +35,7 @@ const signInRoute = createRoute({
   // redirect는 선택 파라미터. 필수로 추론되면 모든 Link가 search를 요구하게 된다
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
     typeof search.redirect === 'string' ? { redirect: search.redirect } : {},
-  component: SignInPage,
+  component: SignInRouteComponent,
 })
 
 const taskListRoute = createRoute({

@@ -98,7 +98,7 @@ features/delete-task/
 잠금 파일이다. UI 작업 전에 반드시 읽는다. 아래는 요약이다.
 
 - 상단 GNB 아래 `max-w-3xl` 중앙 단일 칼럼, canvas 배경 위 surface 카드
-- 카드와 패널은 `bg-surface` + `border-line` + `rounded-ss`. 그림자를 쓰지 않는다
+- 카드와 패널은 `bg-surface` + `border-line` + `rounded-card`. 그림자를 쓰지 않는다
 - accent는 하나뿐. 텍스트는 ink 계열만 쓰고 순수 검정을 쓰지 않는다
 - 간격은 8px 그리드 기준, 최소 단위 4px
 - 로딩, 에러, 빈 상태를 실제로 렌더한다. 데이터 화면 필수

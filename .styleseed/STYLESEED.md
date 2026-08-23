@@ -14,7 +14,7 @@ ink_faint: '#6B7280'      # 라벨, 희미한 텍스트 (4.8:1, 텍스트 하한
 line: '#E5E7EB'
 canvas: '#F3F4F6'         # 페이지 배경
 surface: '#FFFFFF'        # 카드, GNB
-radius: 12px              # rounded-ss
+radius: 12px              # rounded-card (rounded-ss는 Tailwind 내장 좌상단 코너 유틸과 충돌해 회피)
 grid: 8px                 # 간격은 8의 배수 기준, 최소 단위 4px
 font: Pretendard          # npm 패키지 번들
 ```

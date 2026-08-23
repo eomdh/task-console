@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CircleUser, LayoutDashboard, ListTodo, LogIn } from 'lucide-react'
-import { tokenStore } from '@/shared/lib/http'
+import { useSession } from '@/entities/session'
 
 // 현재 페이지는 accent-soft 배경 pill, 나머지는 hover 시 canvas 배경
 const linkClassName =
@@ -11,9 +11,8 @@ const authLinkClassName =
   'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-ink-soft transition-colors hover:bg-canvas hover:text-ink aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent'
 
 export function Gnb() {
-  // 라우트 전환마다 렌더되므로 토큰 존재 여부를 그때그때 읽는다.
-  // 리액티브한 세션 상태는 로그인 슬라이스에서 도입한다
-  const isAuthenticated = Boolean(tokenStore.getAccessToken())
+  // 로그인과 로그아웃 즉시 아이콘이 바뀌도록 세션을 구독한다
+  const isAuthenticated = useSession()
 
   return (
     <header className="sticky top-0 z-10 border-b border-line bg-surface">

@@ -31,7 +31,7 @@
 
   --color-disabled: #9ca3af;
 
-  --radius-ss: 12px;
+  --radius-card: 12px;
 }
 
 @layer base {
@@ -42,5 +42,12 @@
   /* 포커스 링은 전역 한 곳에서. 컴포넌트가 outline을 지우지 않는다 */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  /* Tailwind v4 preflight가 버튼의 pointer 커서를 제거해서 전역으로 복원한다.
+   * 비활성 버튼은 각 컴포넌트의 disabled 스타일(cursor-not-allowed)이 우선 */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
   }
 }
