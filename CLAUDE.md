@@ -105,7 +105,7 @@ features/delete-task/
 - 아이콘은 lucide-react만 쓰고 항상 텍스트 라벨과 함께 둔다
 - 아이콘 배정 (항목 간 중복 금지): 대시보드 `LayoutDashboard`, 할 일 `ListTodo`,
   로그인 `LogIn`, 회원정보 `CircleUser`, TODO `Circle`, DONE `CircleCheck`,
-  삭제 `Trash2`
+  삭제 `Trash2`, 지표의 일 `ClipboardList`, 에러 상태 `CircleAlert`
 
 ### 프로덕션과 다른 가정
 

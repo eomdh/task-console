@@ -5,6 +5,7 @@ import '@/app/styles/index.css'
 import { configureHttp } from '@/shared/lib/http'
 import { sessionStore } from '@/entities/session'
 import { router } from '@/app/router'
+import { AppProviders } from '@/app/providers'
 
 // [데모 환경] 실제 백엔드가 없어 프로덕션 빌드에서도 MSW worker를 기동한다.
 // 실제 서비스라면 이 코드 자체가 존재하지 않는다.
@@ -26,6 +27,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
   </StrictMode>,
 )

@@ -52,5 +52,8 @@ pnpm gen:api      spec/openapi.yaml 에서 타입 재생성
   순수 검정 금지, 8px 그리드, soft 배경 변형 같은 규칙을 가져왔고 팔레트는
   직접 구성했다 (accent `#2563EB`, 그레이는 Tailwind 스케일). 값과 규칙은
   `.styleseed/STYLESEED.md`에 잠가두었다. 라이트 테마만 지원한다.
+- **서버 상태는 TanStack Query.** 캐시와 로딩/에러 상태, 무한 스크롤
+  (`useInfiniteQuery`)을 표준 패턴으로 처리한다. Query 레벨 재시도는 껐다.
+  401 갱신 재시도를 http 클라이언트가 이미 담당해 이중 재시도를 피하기 위함.
 - **TypeScript 6 고정.** typescript-eslint가 TS 7을 아직 지원하지 않는다.
   lint가 완료 기준 게이트라 TS를 내렸다.

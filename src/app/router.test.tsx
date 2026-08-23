@@ -1,13 +1,20 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { RouterProvider, createMemoryHistory } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { tokenStore } from '@/shared/lib/http'
 import { createToken } from '@/mocks/token'
 import { createAppRouter } from './router'
 
 function renderAt(path: string) {
   const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
-  render(<RouterProvider router={router} />)
+  // 페이지가 useQuery를 쓰므로 실제 앱과 같은 프로바이더 구성으로 렌더한다
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  render(
+    <QueryClientProvider client={client}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  )
   return router
 }
 
