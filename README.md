@@ -45,5 +45,9 @@ pnpm gen:api      spec/openapi.yaml 에서 타입 재생성
 - **회원정보 경로는 `/user`.** 요구사항이 경로를 명시하지 않아 API 경로를 따랐다.
 - **내비게이션은 상단 GNB.** 요구사항 표기는 GNB/LNB인데 항목이 3개뿐이라
   상단 바 하나로 충분하다.
+- **디자인 규칙 체계는 StyleSeed 오픈소스를 참고.** 한 accent + 그레이스케일,
+  순수 검정 금지, 8px 그리드, soft 배경 변형 같은 규칙을 가져왔고 팔레트는
+  직접 구성했다 (accent `#2563EB`, 그레이는 Tailwind 스케일). 값과 규칙은
+  `.styleseed/STYLESEED.md`에 잠가두었다. 라이트 테마만 지원한다.
 - **TypeScript 6 고정.** typescript-eslint가 TS 7을 아직 지원하지 않는다.
   lint가 완료 기준 게이트라 TS를 내렸다.

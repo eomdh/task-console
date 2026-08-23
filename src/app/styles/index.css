@@ -3,30 +3,44 @@
 @import 'tailwindcss';
 
 /*
- * 색상 토큰. 하드코딩 금지, 컴포넌트는 이 토큰의 유틸리티만 쓴다.
- * 텍스트 색은 흰 배경 기준 명암비 4.5:1 이상으로 선정.
+ * 디자인 토큰. 값과 규칙의 단일 출처는 .styleseed/STYLESEED.md 잠금 파일이다.
+ * 하드코딩 금지, 컴포넌트는 이 토큰의 유틸리티만 쓴다.
  */
 @theme {
   --font-sans: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
 
-  --color-primary: #2563eb;
-  --color-primary-strong: #1d4ed8;
-  --color-ink: #1f2937;
-  --color-muted: #6b7280;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-soft: #eff6ff;
+
+  --color-ink: #111827;
+  --color-ink-soft: #4b5563;
+  --color-ink-faint: #6b7280;
+
+  --color-line: #e5e7eb;
+  --color-canvas: #f3f4f6;
   --color-surface: #ffffff;
-  --color-surface-weak: #f9fafb;
-  --color-border: #e5e7eb;
+  --color-surface-2: #f9fafb;
+
   --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+  --color-good: #15803d;
+  --color-good-soft: #f0fdf4;
+  --color-warn: #b45309;
+  --color-warn-soft: #fffbeb;
+
   --color-disabled: #9ca3af;
+
+  --radius-ss: 12px;
 }
 
 @layer base {
   body {
-    @apply bg-surface font-sans text-ink;
+    @apply bg-canvas font-sans text-ink;
   }
 
   /* 포커스 링은 전역 한 곳에서. 컴포넌트가 outline을 지우지 않는다 */
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary;
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 }

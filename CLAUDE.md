@@ -94,8 +94,14 @@ features/delete-task/
 
 ### 화면 규칙
 
-- 상단 GNB 아래 `max-w-3xl` 중앙 단일 칼럼
-- 카드와 패널은 `bg-surface` + `border-border` + `rounded-lg`. 그림자를 쓰지 않는다
+토큰 값, 타이포 스케일, 상태색 규칙의 단일 출처는 `.styleseed/STYLESEED.md`
+잠금 파일이다. UI 작업 전에 반드시 읽는다. 아래는 요약이다.
+
+- 상단 GNB 아래 `max-w-3xl` 중앙 단일 칼럼, canvas 배경 위 surface 카드
+- 카드와 패널은 `bg-surface` + `border-line` + `rounded-ss`. 그림자를 쓰지 않는다
+- accent는 하나뿐. 텍스트는 ink 계열만 쓰고 순수 검정을 쓰지 않는다
+- 간격은 8px 그리드 기준, 최소 단위 4px
+- 로딩, 에러, 빈 상태를 실제로 렌더한다. 데이터 화면 필수
 - 아이콘은 lucide-react만 쓰고 항상 텍스트 라벨과 함께 둔다
 - 아이콘 배정 (항목 간 중복 금지): 대시보드 `LayoutDashboard`, 할 일 `ListTodo`,
   로그인 `LogIn`, 회원정보 `CircleUser`, TODO `Circle`, DONE `CircleCheck`,

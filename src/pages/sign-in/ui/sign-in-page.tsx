@@ -1,7 +1,7 @@
 export function SignInPage() {
   return (
     <section>
-      <h1 className="text-xl font-bold">로그인</h1>
+      <h1 className="text-xl font-semibold">로그인</h1>
     </section>
   )
 }
