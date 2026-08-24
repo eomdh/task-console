@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { CircleAlert } from 'lucide-react'
+import { ChevronLeft, CircleAlert } from 'lucide-react'
 import { useTaskDetailQuery } from '@/entities/task'
 import { DeleteTask } from '@/features/delete-task'
 import { ApiError } from '@/shared/lib/http'
@@ -79,7 +79,12 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
         {/* 목록 카드는 두 줄에서 잘리므로 상세에서는 줄바꿈을 살려 전문을 보여준다 */}
         <p className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</p>
       </article>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
+        {/* 딥링크로 들어오면 브라우저 뒤로가기가 돌아갈 곳이 없어 목록 경로를 항상 둔다 */}
+        <Button variant="ghost" onClick={() => void navigate({ to: '/task' })}>
+          <ChevronLeft size={16} aria-hidden />
+          목록으로
+        </Button>
         <DeleteTask taskId={taskId} onDeleted={() => void navigate({ to: '/task' })} />
       </div>
     </div>

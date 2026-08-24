@@ -40,6 +40,15 @@ describe('할 일 상세', () => {
     expect(screen.getByText(/2026/)).toBeInTheDocument()
   })
 
+  it('목록으로 버튼을 누르면 목록으로 돌아간다', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/task/2')
+    await screen.findByRole('heading', { name: '할 일 2' })
+
+    await user.click(screen.getByRole('button', { name: '목록으로' }))
+    expect(router.state.location.pathname).toBe('/task')
+  })
+
   it('없는 id면 리소스 없음 화면과 목록 복귀 버튼을 보여준다', async () => {
     const user = userEvent.setup()
     const router = renderAt('/task/9999')
