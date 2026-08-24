@@ -52,6 +52,26 @@ describe('할 일 상세', () => {
     expect(router.state.location.pathname).toBe('/task')
   })
 
+  it('id를 입력해 삭제하면 목록으로 보내고 안내와 함께 항목이 사라진다', async () => {
+    const user = userEvent.setup()
+    const router = renderAt('/task/3')
+    await screen.findByRole('heading', { name: '할 일 3' })
+
+    await user.click(screen.getByRole('button', { name: /삭제/ }))
+    await user.type(screen.getByLabelText('할 일 번호'), '3')
+    await user.click(screen.getByRole('button', { name: '제출' }))
+
+    expect(await screen.findByText('할 일이 삭제되었습니다')).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/task')
+    // 목록 캐시가 무효화되어 지운 항목이 빠진 채로 다시 그려진다
+    expect(await screen.findByText('할 일 1')).toBeInTheDocument()
+    expect(screen.queryByText('할 일 3')).not.toBeInTheDocument()
+
+    // 자동 소거를 기다리지 않고 직접 닫을 수 있다
+    await user.click(screen.getByRole('button', { name: '닫기' }))
+    expect(screen.queryByText('할 일이 삭제되었습니다')).not.toBeInTheDocument()
+  })
+
   it('404가 아닌 실패는 다시 시도로 복구된다', async () => {
     server.use(
       http.get(

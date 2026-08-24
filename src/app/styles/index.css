@@ -32,6 +32,16 @@
   --color-disabled: #9ca3af;
 
   --radius-card: 12px;
+
+  /* 잠금 규칙이 그림자를 금지해서 떠 있는 느낌을 등장 모션으로 대신한다 */
+  --animate-toast-in: toast-in 160ms ease-out;
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
 }
 
 @layer base {
@@ -49,6 +59,13 @@
   button:not(:disabled),
   [role='button']:not([aria-disabled='true']) {
     cursor: pointer;
+  }
+
+  /* 모션을 줄이도록 설정한 사용자에게는 등장 애니메이션을 걷어낸다 */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+    }
   }
 
   /* 기본 스크롤바가 너무 진해서 중간 그레이 토큰으로 얇게 통일한다 */

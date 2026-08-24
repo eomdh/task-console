@@ -102,11 +102,12 @@ features/delete-task/
 - accent는 하나뿐. 텍스트는 ink 계열만 쓰고 순수 검정을 쓰지 않는다
 - 간격은 8px 그리드 기준, 최소 단위 4px
 - 로딩, 에러, 빈 상태를 실제로 렌더한다. 데이터 화면 필수
-- 아이콘은 lucide-react만 쓰고 항상 텍스트 라벨과 함께 둔다
+- 아이콘은 lucide-react만 쓰고 항상 텍스트 라벨과 함께 둔다.
+  라벨 없이 아이콘만 두는 컨트롤은 `aria-label`로 이름을 준다
 - 아이콘 배정 (항목 간 중복 금지): 대시보드 `LayoutDashboard`, 할 일 `ListTodo`,
   로그인 `LogIn`, 회원정보 `CircleUser`, TODO `Circle`, DONE `CircleCheck`,
   삭제 `Trash2`, 지표의 일 `ClipboardList`, 에러 상태 `CircleAlert`,
-  빈 목록 `Inbox`
+  빈 목록 `Inbox`, 닫기 `X`
 
 ### 프로덕션과 다른 가정
 

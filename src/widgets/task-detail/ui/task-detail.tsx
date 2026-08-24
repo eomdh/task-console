@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { CircleAlert } from 'lucide-react'
 import { useTaskDetailQuery } from '@/entities/task'
+import { DeleteTask } from '@/features/delete-task'
 import { ApiError } from '@/shared/lib/http'
 import { Button } from '@/shared/ui'
 
@@ -64,18 +65,23 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
   }
 
   return (
-    <article className="flex flex-col gap-4 rounded-card border border-line bg-surface p-6">
-      <header className="flex flex-col gap-1">
-        <h2 className="text-base font-semibold text-ink">{data.title}</h2>
-        <p className="text-xs text-ink-faint">
-          등록{' '}
-          <time dateTime={data.registerDatetime}>
-            {dateTimeFormat.format(new Date(data.registerDatetime))}
-          </time>
-        </p>
-      </header>
-      {/* 목록 카드는 두 줄에서 잘리므로 상세에서는 줄바꿈을 살려 전문을 보여준다 */}
-      <p className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</p>
-    </article>
+    <div className="flex flex-col gap-4">
+      <article className="flex flex-col gap-4 rounded-card border border-line bg-surface p-6">
+        <header className="flex flex-col gap-1">
+          <h2 className="text-base font-semibold text-ink">{data.title}</h2>
+          <p className="text-xs text-ink-faint">
+            등록{' '}
+            <time dateTime={data.registerDatetime}>
+              {dateTimeFormat.format(new Date(data.registerDatetime))}
+            </time>
+          </p>
+        </header>
+        {/* 목록 카드는 두 줄에서 잘리므로 상세에서는 줄바꿈을 살려 전문을 보여준다 */}
+        <p className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</p>
+      </article>
+      <div className="flex justify-end">
+        <DeleteTask taskId={taskId} onDeleted={() => void navigate({ to: '/task' })} />
+      </div>
+    </div>
   )
 }

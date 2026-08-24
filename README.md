@@ -48,6 +48,15 @@ pnpm gen:api      spec/openapi.yaml 에서 타입 재생성
   Tab 순회 중 포커스된 카드가 윈도우 밖으로 나가면 포커스가 유실된다
   (스크롤 영역 자체는 키보드로 스크롤 가능), overscan(카드 5장)을 한
   프레임에 넘는 플릭에서는 빈 영역이 잠깐 보일 수 있다.
+- **삭제 확인 input은 라우트 파라미터와 비교.** 상세 응답
+  (`TaskDetailResponse`)은 `additionalProperties: false`로 닫혀 있어 title,
+  memo, registerDatetime만 온다. id가 없으므로 확인값은 URL의 `:id`와 맞춘다.
+  같은 이유로 상세 화면에는 TODO/DONE 표시가 없다. 제공된 계약을 고쳐 필드를
+  늘리는 대신 없는 정보를 지어내지 않는 쪽을 택했다.
+- **삭제 후에는 목록 캐시를 통째로 무효화.** offset 페이지네이션이라 한 건이
+  지워지면 뒤 항목이 한 칸씩 당겨진다. 캐시에서 항목만 빼면 다음 페이지를
+  받을 때 경계에서 한 건이 누락된다. 이미 받아둔 페이지를 다시 받는 비용은
+  이 정합성과 맞바꿨다.
 - **라우팅은 코드 기반.** TanStack Router의 파일 기반 라우팅은 `src/routes/`
   디렉토리를 강제해 FSD의 `pages` 레이어와 역할이 겹친다. 라우트 트리를
   `app/router.tsx`에 두고 `pages`를 조합한다.
