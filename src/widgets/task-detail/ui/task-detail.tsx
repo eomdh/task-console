@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useCanGoBack, useNavigate, useRouter } from '@tanstack/react-router'
 import { ChevronLeft, CircleAlert } from 'lucide-react'
 import { useTaskDetailQuery } from '@/entities/task'
 import { DeleteTask } from '@/features/delete-task'
@@ -18,6 +18,18 @@ interface TaskDetailProps {
 export function TaskDetail({ taskId }: TaskDetailProps) {
   const { data, isPending, isError, error, refetch } = useTaskDetailQuery(taskId)
   const navigate = useNavigate()
+  const router = useRouter()
+  const canGoBack = useCanGoBack()
+
+  // 뒤로가기로 돌아가야 목록이 보던 위치로 복원되고, 삭제한 상세가 뒤로가기 스택에서 빠진다.
+  // 딥링크로 들어와 돌아갈 항목이 없으면 목록 경로로 보낸다
+  const goToList = () => {
+    if (canGoBack) {
+      router.history.back()
+      return
+    }
+    void navigate({ to: '/task' })
+  }
 
   if (isPending) {
     return (
@@ -41,7 +53,7 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
             <CircleAlert size={18} className="text-danger" aria-hidden />
             요청한 할 일이 없습니다
           </p>
-          <Button variant="ghost" onClick={() => void navigate({ to: '/task' })}>
+          <Button variant="ghost" onClick={goToList}>
             목록으로 돌아가기
           </Button>
         </div>
@@ -80,12 +92,11 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
         <p className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</p>
       </article>
       <div className="flex justify-end gap-2">
-        {/* 딥링크로 들어오면 브라우저 뒤로가기가 돌아갈 곳이 없어 목록 경로를 항상 둔다 */}
-        <Button variant="ghost" onClick={() => void navigate({ to: '/task' })}>
+        <Button variant="ghost" onClick={goToList}>
           <ChevronLeft size={16} aria-hidden />
           목록으로
         </Button>
-        <DeleteTask taskId={taskId} onDeleted={() => void navigate({ to: '/task' })} />
+        <DeleteTask taskId={taskId} onDeleted={goToList} />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useElementScrollRestoration } from '@tanstack/react-router'
 import { CircleAlert, Inbox } from 'lucide-react'
 import { useMemo } from 'react'
 import type { UIEventHandler } from 'react'
@@ -10,6 +10,9 @@ import { Button } from '@/shared/ui'
 // 트리거가 scroll 이벤트뿐이라 첫 페이지가 뷰포트보다 커야 동작한다
 // (페이지 20건 x 104px = 2080px 전제, 목 서버 페이지 크기와 묶인 암묵 의존)
 const NEXT_PAGE_THRESHOLD_PX = TASK_ROW_HEIGHT * 3
+
+// 라우터가 이 id로 스크롤 위치를 히스토리 항목마다 캐시한다
+const SCROLL_RESTORATION_ID = 'task-list'
 
 export function TaskList() {
   const {
@@ -26,9 +29,11 @@ export function TaskList() {
   const tasks = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data])
 
   // 훅 순서 보장을 위해 조기 return보다 먼저 호출한다
+  const scrollEntry = useElementScrollRestoration({ id: SCROLL_RESTORATION_ID })
   const { window: renderWindow, containerProps } = useVirtualWindow({
     itemCount: tasks.length,
     itemHeight: TASK_ROW_HEIGHT,
+    initialScrollTop: scrollEntry?.scrollY,
   })
 
   const handleScroll: UIEventHandler<HTMLElement> = (event) => {
@@ -85,6 +90,7 @@ export function TaskList() {
       onScroll={handleScroll}
       tabIndex={0}
       aria-label="할 일 목록 스크롤 영역"
+      data-scroll-restoration-id={SCROLL_RESTORATION_ID}
       data-testid="task-scroll"
       className="min-h-0 flex-1 overflow-y-auto pr-3"
     >

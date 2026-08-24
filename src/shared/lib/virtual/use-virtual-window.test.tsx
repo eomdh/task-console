@@ -14,11 +14,20 @@ afterEach(() => {
   Reflect.deleteProperty(HTMLElement.prototype, 'clientHeight')
 })
 
-function Harness({ itemCount, onRender }: { itemCount: number; onRender: () => void }) {
+function Harness({
+  itemCount,
+  onRender,
+  initialScrollTop,
+}: {
+  itemCount: number
+  onRender: () => void
+  initialScrollTop?: number
+}) {
   onRender()
   const { window: renderWindow, containerProps } = useVirtualWindow({
     itemCount,
     itemHeight: 100,
+    initialScrollTop,
   })
   return (
     <div data-testid="container" {...containerProps}>
@@ -71,6 +80,32 @@ describe('useVirtualWindow', () => {
     scrollTo(screen.getByTestId('container'), 10_000)
     rerender(<Harness itemCount={10} onRender={vi.fn()} />)
     expect(screen.getByTestId('summary')).toHaveTextContent('0-10-1000')
+  })
+
+  it('복원할 위치를 받으면 첫 윈도우부터 그 자리에서 시작한다', () => {
+    // jsdom은 레이아웃이 없어 스크롤 가능 범위도 흉내내야 한다 (500건 x 100px)
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      value: 50_000,
+    })
+
+    render(<Harness itemCount={500} onRender={vi.fn()} initialScrollTop={10_000} />)
+    expect(screen.getByTestId('summary')).toHaveTextContent('95-111-50000')
+
+    Reflect.deleteProperty(HTMLElement.prototype, 'scrollHeight')
+  })
+
+  it('목록이 줄어 그만큼 내려갈 수 없으면 복원을 포기하고 최상단에 둔다', () => {
+    // 캐시가 1페이지만 남아 콘텐츠가 10건뿐인 상황
+    Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
+      configurable: true,
+      value: 1_000,
+    })
+
+    render(<Harness itemCount={10} onRender={vi.fn()} initialScrollTop={10_000} />)
+    expect(screen.getByTestId('summary')).toHaveTextContent('0-10-1000')
+
+    Reflect.deleteProperty(HTMLElement.prototype, 'scrollHeight')
   })
 
   it('컨테이너가 언마운트됐다 다시 붙으면 윈도우가 DOM의 scrollTop과 다시 맞는다', () => {

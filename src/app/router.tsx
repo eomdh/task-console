@@ -67,9 +67,11 @@ const routeTree = rootRoute.addChildren([
   userRoute,
 ])
 
-// 테스트가 memory history로 라우터를 격리 생성할 수 있게 팩토리로 둔다
+// 테스트가 memory history로 라우터를 격리 생성할 수 있게 팩토리로 둔다.
+// scrollRestoration은 히스토리 항목 단위로 스크롤 위치를 캐시한다.
+// 뒤로가기는 보던 위치로, 링크로 새로 들어오면 최상단이 된다
 export function createAppRouter(history?: RouterHistory) {
-  return createRouter({ routeTree, ...(history ? { history } : {}) })
+  return createRouter({ routeTree, scrollRestoration: true, ...(history ? { history } : {}) })
 }
 
 export const router = createAppRouter()
