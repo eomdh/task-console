@@ -71,11 +71,10 @@ export function useVirtualWindow(options: UseVirtualWindowOptions): UseVirtualWi
     if (!element) return
     if (!restoredRef.current) {
       restoredRef.current = true
+      // 목록이 그새 줄어 목표까지 못 내려가면 브라우저가 알아서 최대치로 잘라낸다.
+      // 그 값을 아래에서 그대로 읽어 쓰므로 갈 수 있는 데까지만 간다
       const restoreTo = initialScrollTopRef.current
-      // 목록이 줄어 그만큼 내려갈 수 없으면 어중간한 위치 대신 최상단에 둔다
-      if (restoreTo && restoreTo <= element.scrollHeight - element.clientHeight) {
-        element.scrollTop = restoreTo
-      }
+      if (restoreTo !== undefined) element.scrollTop = restoreTo
     }
     if (scrollTopRef.current !== element.scrollTop) {
       scrollTopRef.current = element.scrollTop
