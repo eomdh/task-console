@@ -90,5 +90,10 @@ pnpm gen:api      spec/openapi.yaml 에서 타입 재생성
 - **서버 상태는 TanStack Query.** 캐시와 로딩/에러 상태, 무한 스크롤
   (`useInfiniteQuery`)을 표준 패턴으로 처리한다. Query 레벨 재시도는 껐다.
   401 갱신 재시도를 http 클라이언트가 이미 담당해 이중 재시도를 피하기 위함.
+- **Pretendard는 동적 서브셋으로 받는다.** 통짜 variable 파일이 2.0MB라 산출물에서
+  가장 무거운 자산이었다. 같은 패키지의 동적 서브셋으로 바꾸면 `unicode-range`로
+  쪼갠 조각 중 화면에 실제 나온 글자가 속한 것만 받는다. 첫 화면은 3조각 79KB,
+  목록 500건을 끝까지 훑어도 8조각 203KB다. 대신 `@font-face` 규칙이 92개로 늘어
+  CSS가 gzip 기준 4KB에서 18KB가 된다. 그 비용을 치를 만한 교환으로 봤다.
 - **TypeScript 6 고정.** typescript-eslint가 TS 7을 아직 지원하지 않는다.
   lint가 완료 기준 게이트라 TS를 내렸다.
