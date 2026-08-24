@@ -1,5 +1,5 @@
 export { ApiError } from './api-error'
 export { tokenStore } from './token-store'
 export type { AuthTokens } from './token-store'
-export { configureHttp, request } from './client'
+export { configureHttp, request, requestRefreshTokens } from './client'
 export type { HttpOptions } from './client'

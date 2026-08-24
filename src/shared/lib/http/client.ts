@@ -53,19 +53,29 @@ async function toApiError(response: Response): Promise<ApiError> {
   return new ApiError(response.status, '요청이 실패했습니다')
 }
 
-async function executeRefresh(): Promise<boolean> {
+// refresh 요청 1회. 저장과 실패 처리는 호출자가 정한다.
+// 401 갱신과 부팅 시 세션 복원이 같은 요청을 쓰되 실패의 의미가 서로 다르기 때문
+export async function requestRefreshTokens(): Promise<AuthTokens | null> {
   try {
     // 쿠키(token)는 same-origin 요청이라 브라우저가 자동 전송한다
     const response = await fetch(new URL('/api/refresh', location.origin), { method: 'POST' })
     if (response.ok) {
       const body: unknown = await response.json()
       if (isAuthTokens(body)) {
-        tokenStore.save(body)
-        return true
+        return body
       }
     }
   } catch {
-    // 네트워크 실패도 세션 만료와 같게 처리한다
+    // 네트워크 실패도 갱신 실패와 같게 처리한다
+  }
+  return null
+}
+
+async function executeRefresh(): Promise<boolean> {
+  const tokens = await requestRefreshTokens()
+  if (tokens) {
+    tokenStore.save(tokens)
+    return true
   }
   // 통지는 요청 수와 무관하게 refresh 실행당 1회
   tokenStore.clear()

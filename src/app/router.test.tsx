@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import { RouterProvider, createMemoryHistory } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { tokenStore } from '@/shared/lib/http'
+import { restoreSession } from '@/entities/session'
 import { createToken } from '@/mocks/token'
 import { createAppRouter } from './router'
 
@@ -41,6 +42,14 @@ describe('보호 라우트', () => {
     signInForTest()
     renderAt('/')
     expect(await screen.findByRole('heading', { name: '대시보드' })).toBeInTheDocument()
+  })
+
+  it('새로고침처럼 accessToken이 없어도 refresh 쿠키가 남아 있으면 복원 후 열린다', async () => {
+    document.cookie = `token=${createToken('demo-user', 60_000)}; path=/`
+    await restoreSession()
+
+    renderAt('/task')
+    expect(await screen.findByRole('heading', { name: '할 일' })).toBeInTheDocument()
   })
 })
 

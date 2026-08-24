@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from '@tanstack/react-router'
 import '@/app/styles/index.css'
 import { configureHttp } from '@/shared/lib/http'
-import { sessionStore } from '@/entities/session'
+import { restoreSession, sessionStore } from '@/entities/session'
 import { router } from '@/app/router'
 import { AppProviders } from '@/app/providers'
 
@@ -19,6 +19,9 @@ configureHttp({
     void router.navigate({ to: '/sign-in' })
   },
 })
+
+// 렌더 전에 복원해야 라우트 가드가 첫 진입을 비로그인으로 오판하지 않는다
+await restoreSession()
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
