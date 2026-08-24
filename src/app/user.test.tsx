@@ -18,6 +18,7 @@ function renderUserPage() {
       <RouterProvider router={router} />
     </QueryClientProvider>,
   )
+  return router
 }
 
 beforeEach(() => {
@@ -40,6 +41,19 @@ describe('회원정보', () => {
     // 값마다 이름표가 붙는다
     expect(screen.getByText('이름')).toBeInTheDocument()
     expect(screen.getByText('메모')).toBeInTheDocument()
+  })
+
+  it('로그아웃하면 로그인 페이지로 가고 GNB가 비로그인 상태로 바뀐다', async () => {
+    const user = userEvent.setup()
+    const router = renderUserPage()
+    await screen.findByText(demoUser.name)
+    expect(screen.getByRole('link', { name: /회원정보/ })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: '로그아웃' }))
+
+    expect(router.state.location.pathname).toBe('/sign-in')
+    expect(await screen.findByRole('link', { name: /로그인/ })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /회원정보/ })).not.toBeInTheDocument()
   })
 
   it('요청이 실패하면 에러 상태를 보여주고 다시 시도로 복구된다', async () => {

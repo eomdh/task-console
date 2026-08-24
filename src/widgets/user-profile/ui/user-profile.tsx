@@ -1,9 +1,12 @@
+import { useNavigate } from '@tanstack/react-router'
 import { CircleAlert } from 'lucide-react'
 import { useUserQuery } from '@/entities/user'
+import { SignOutButton } from '@/features/sign-out'
 import { Button } from '@/shared/ui'
 
 export function UserProfile() {
   const { data, isPending, isError, refetch } = useUserQuery()
+  const navigate = useNavigate()
 
   if (isPending) {
     return (
@@ -33,15 +36,20 @@ export function UserProfile() {
   }
 
   return (
-    <dl className="flex flex-col gap-5 rounded-card border border-line bg-surface p-6">
-      <div className="flex flex-col gap-1">
-        <dt className="text-xs text-ink-faint">이름</dt>
-        <dd className="text-base font-semibold text-ink">{data.name}</dd>
+    <div className="flex flex-col gap-4">
+      <dl className="flex flex-col gap-5 rounded-card border border-line bg-surface p-6">
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs text-ink-faint">이름</dt>
+          <dd className="text-base font-semibold text-ink">{data.name}</dd>
+        </div>
+        <div className="flex flex-col gap-1">
+          <dt className="text-xs text-ink-faint">메모</dt>
+          <dd className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</dd>
+        </div>
+      </dl>
+      <div className="flex justify-end">
+        <SignOutButton onSignedOut={() => void navigate({ to: '/sign-in' })} />
       </div>
-      <div className="flex flex-col gap-1">
-        <dt className="text-xs text-ink-faint">메모</dt>
-        <dd className="whitespace-pre-line text-sm text-ink-soft">{data.memo}</dd>
-      </div>
-    </dl>
+    </div>
   )
 }
