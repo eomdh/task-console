@@ -1,3 +1,5 @@
 export { useTasksInfiniteQuery } from './model/use-tasks-infinite-query'
+export { useTaskDetailQuery } from './model/use-task-detail-query'
 export { TaskCard, TASK_ROW_HEIGHT } from './ui/task-card'
 export type { TaskItem, TaskListResponse } from './api/get-tasks'
+export type { TaskDetailResponse } from './api/get-task-detail'
