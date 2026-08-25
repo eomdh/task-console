@@ -7,6 +7,7 @@ import {
 import type { RouterHistory } from '@tanstack/react-router'
 import { tokenStore } from '@/shared/lib/http'
 import { DashboardPage } from '@/pages/dashboard'
+import { NotFoundPage } from '@/pages/not-found'
 import { TaskDetailPage } from '@/pages/task-detail'
 import { TaskListPage } from '@/pages/task-list'
 import { UserPage } from '@/pages/user'
@@ -71,7 +72,13 @@ const routeTree = rootRoute.addChildren([
 // scrollRestoration은 히스토리 항목 단위로 스크롤 위치를 캐시한다.
 // 뒤로가기는 보던 위치로, 링크로 새로 들어오면 최상단이 된다
 export function createAppRouter(history?: RouterHistory) {
-  return createRouter({ routeTree, scrollRestoration: true, ...(history ? { history } : {}) })
+  return createRouter({
+    routeTree,
+    scrollRestoration: true,
+    // 없는 주소는 라우터 기본 화면(영어 한 줄) 대신 우리 화면으로 받는다
+    defaultNotFoundComponent: NotFoundPage,
+    ...(history ? { history } : {}),
+  })
 }
 
 export const router = createAppRouter()

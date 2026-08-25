@@ -1,7 +1,7 @@
 import { Circle, CircleAlert, CircleCheck, ClipboardList } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useDashboardQuery } from '@/entities/dashboard'
-import { Button } from '@/shared/ui'
+import { Button, StatusPanel } from '@/shared/ui'
 
 interface MetricCardProps {
   label: string
@@ -60,18 +60,17 @@ export function DashboardStats() {
 
   if (isError) {
     return (
-      <div
+      <StatusPanel
         role="alert"
-        className="flex flex-col items-start gap-3 rounded-card border border-line bg-surface p-6"
-      >
-        <p className="flex items-center gap-2 text-sm text-ink-soft">
-          <CircleAlert size={18} className="text-danger" aria-hidden />
-          대시보드를 불러오지 못했습니다
-        </p>
-        <Button variant="ghost" onClick={() => void refetch()}>
-          다시 시도
-        </Button>
-      </div>
+        icon={CircleAlert}
+        tone="danger"
+        title="대시보드를 불러오지 못했습니다"
+        action={
+          <Button variant="ghost" onClick={() => void refetch()}>
+            다시 시도
+          </Button>
+        }
+      />
     )
   }
 

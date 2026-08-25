@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import type { UIEventHandler } from 'react'
 import { TASK_ROW_HEIGHT, TaskCard, useTasksInfiniteQuery } from '@/entities/task'
 import { useVirtualWindow } from '@/shared/lib/virtual'
-import { Button } from '@/shared/ui'
+import { Button, StatusPanel } from '@/shared/ui'
 
 // 끝에서 카드 3장 이내로 접근하면 다음 페이지를 미리 부른다.
 // 트리거가 scroll 이벤트뿐이라 첫 페이지가 뷰포트보다 커야 동작한다
@@ -68,27 +68,23 @@ export function TaskList() {
 
   if (isError) {
     return (
-      <div
+      <StatusPanel
         role="alert"
-        className="flex flex-col items-start gap-3 rounded-card border border-line bg-surface p-6"
-      >
-        <p className="flex items-center gap-2 text-sm text-ink-soft">
-          <CircleAlert size={18} className="text-danger" aria-hidden />
-          할 일 목록을 불러오지 못했습니다
-        </p>
-        <Button variant="ghost" onClick={() => void refetch()}>
-          다시 시도
-        </Button>
-      </div>
+        icon={CircleAlert}
+        tone="danger"
+        title="할 일 목록을 불러오지 못했습니다"
+        action={
+          <Button variant="ghost" onClick={() => void refetch()}>
+            다시 시도
+          </Button>
+        }
+      />
     )
   }
 
   if (tasks.length === 0) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-card border border-line bg-surface p-10">
-        <Inbox size={24} className="text-ink-faint" aria-hidden />
-        <p className="text-sm text-ink-soft">표시할 할 일이 없습니다</p>
-      </div>
+      <StatusPanel icon={Inbox} title="표시할 할 일이 없습니다" />
     )
   }
 
@@ -101,6 +97,9 @@ export function TaskList() {
       {...containerProps}
       onScroll={handleScroll}
       tabIndex={0}
+      // tabIndex만 붙은 div는 role이 generic이고 ARIA가 generic에 이름 붙이는 것을 막는다.
+      // region은 이름을 요구하는 role이라 aria-label이 실제로 읽힌다
+      role="region"
       aria-label="할 일 목록 스크롤 영역"
       data-scroll-restoration-id={SCROLL_RESTORATION_ID}
       data-testid="task-scroll"
@@ -132,10 +131,11 @@ export function TaskList() {
           ))}
         </ul>
       </div>
-      {/* 라이브 리전은 미리 존재해야 읽힌다. 높이도 고정해 scrollHeight 흔들림을 막는다 */}
+      {/* 라이브 리전은 미리 존재해야 읽힌다. 높이도 고정해 scrollHeight 흔들림을 막는다.
+          이 줄만 canvas 배경 위라 ink-faint면 4.38:1로 기준에 못 미친다 (ink-soft는 6.88:1) */}
       <p
         role="status"
-        className="flex h-10 items-center justify-center text-sm text-ink-faint"
+        className="flex h-10 items-center justify-center text-sm text-ink-soft"
       >
         {isFetchingNextPage ? '더 불러오는 중' : ''}
       </p>

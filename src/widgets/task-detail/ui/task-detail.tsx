@@ -3,7 +3,7 @@ import { ChevronLeft, CircleAlert } from 'lucide-react'
 import { useTaskDetailQuery } from '@/entities/task'
 import { DeleteTask } from '@/features/delete-task'
 import { ApiError } from '@/shared/lib/http'
-import { Button } from '@/shared/ui'
+import { Button, StatusPanel } from '@/shared/ui'
 
 // Intl 인스턴스는 생성 비용이 있어 모듈 스코프에서 한 번만 만든다
 const dateTimeFormat = new Intl.DateTimeFormat('ko-KR', {
@@ -21,7 +21,7 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
   const router = useRouter()
   const canGoBack = useCanGoBack()
 
-  // 뒤로가기로 돌아가야 목록이 보던 위치로 복원되고, 삭제한 상세가 뒤로가기 스택에서 빠진다.
+  // 뒤로가기로 돌아가야 목록이 보던 위치로 복원된다.
   // 딥링크로 들어와 돌아갈 항목이 없으면 목록 경로로 보낸다
   const goToList = () => {
     if (canGoBack) {
@@ -29,6 +29,13 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
       return
     }
     void navigate({ to: '/task' })
+  }
+
+  // 삭제 후에는 히스토리와 무관하게 목록으로 보낸다. 요구사항이 "목록으로 redirect"를
+  // 문구로 정했는데, 뒤로가기는 직전 항목이 목록이라는 가정에 기대기 때문이다.
+  // replace라 지운 항목의 상세가 히스토리에서 실제로 빠진다
+  const goToListAfterDelete = () => {
+    void navigate({ to: '/task', replace: true })
   }
 
   if (isPending) {
@@ -52,34 +59,34 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
     // 없는 리소스는 다시 시도해도 결과가 같으므로 목록 복귀만 제공한다
     if (error instanceof ApiError && error.status === 404) {
       return (
-        <div
+        <StatusPanel
           role="alert"
-          className="flex flex-col items-start gap-3 rounded-card border border-line bg-surface p-6"
-        >
-          <p className="flex items-center gap-2 text-sm text-ink-soft">
-            <CircleAlert size={18} className="text-danger" aria-hidden />
-            요청한 할 일이 없습니다
-          </p>
-          <Button variant="ghost" onClick={goToList}>
-            목록으로 돌아가기
-          </Button>
-        </div>
+          icon={CircleAlert}
+          tone="danger"
+          title="요청한 할 일이 없습니다"
+          description="이미 삭제되었거나 잘못된 주소입니다"
+          action={
+            <Button variant="ghost" onClick={goToList}>
+              <ChevronLeft size={16} aria-hidden />
+              목록으로 돌아가기
+            </Button>
+          }
+        />
       )
     }
 
     return (
-      <div
+      <StatusPanel
         role="alert"
-        className="flex flex-col items-start gap-3 rounded-card border border-line bg-surface p-6"
-      >
-        <p className="flex items-center gap-2 text-sm text-ink-soft">
-          <CircleAlert size={18} className="text-danger" aria-hidden />
-          할 일을 불러오지 못했습니다
-        </p>
-        <Button variant="ghost" onClick={() => void refetch()}>
-          다시 시도
-        </Button>
-      </div>
+        icon={CircleAlert}
+        tone="danger"
+        title="할 일을 불러오지 못했습니다"
+        action={
+          <Button variant="ghost" onClick={() => void refetch()}>
+            다시 시도
+          </Button>
+        }
+      />
     )
   }
 
@@ -103,7 +110,7 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
           <ChevronLeft size={16} aria-hidden />
           목록으로
         </Button>
-        <DeleteTask taskId={taskId} onDeleted={goToList} />
+        <DeleteTask taskId={taskId} onDeleted={goToListAfterDelete} />
       </div>
     </div>
   )

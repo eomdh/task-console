@@ -5,12 +5,15 @@ import { RouterProvider, createMemoryHistory } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { http, HttpResponse } from 'msw'
 import { server } from '@/mocks/server'
+import { demoAccount } from '@/mocks/seed'
 import { createToken } from '@/mocks/token'
 import { tokenStore } from '@/shared/lib/http'
 import { createAppRouter } from './router'
 
-function renderAt(path: string) {
-  const router = createAppRouter(createMemoryHistory({ initialEntries: [path] }))
+// 히스토리 앞부분이 착지 지점에 영향을 주는 케이스가 있어 여러 항목을 받는다
+function renderAt(path: string | string[]) {
+  const initialEntries = Array.isArray(path) ? path : [path]
+  const router = createAppRouter(createMemoryHistory({ initialEntries }))
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   render(
     <QueryClientProvider client={client}>
@@ -79,6 +82,38 @@ describe('할 일 상세', () => {
     // 자동 소거를 기다리지 않고 직접 닫을 수 있다
     await user.click(screen.getByRole('button', { name: '닫기' }))
     expect(screen.queryByText('할 일이 삭제되었습니다')).not.toBeInTheDocument()
+  })
+
+  it('로그인을 거쳐 들어와도 목록으로 버튼이 로그인 화면으로 되돌리지 않는다', async () => {
+    // 가드가 로그인으로 보냈다 돌아온 경로. 로그인 화면이 히스토리에 남아 있으면
+    // 뒤로가기 한 칸이 목록이 아니라 로그인이 된다
+    tokenStore.clear()
+    const user = userEvent.setup()
+    const router = renderAt('/task/7')
+
+    await screen.findByRole('heading', { name: '로그인' })
+    await user.type(screen.getByLabelText('이메일'), demoAccount.email)
+    await user.type(screen.getByLabelText('비밀번호'), demoAccount.password)
+    await user.click(screen.getByRole('button', { name: '로그인' }))
+    await screen.findByRole('heading', { name: '할 일 7' })
+
+    await user.click(screen.getByRole('button', { name: '목록으로' }))
+    expect(router.state.location.pathname).toBe('/task')
+  })
+
+  it('직전 화면이 목록이 아니어도 삭제하면 목록으로 가고 안내가 뜬다', async () => {
+    // 삭제는 뒤로가기를 쓰지 않는다. 직전 항목이 목록이라는 가정에 기대면
+    // 요구사항의 "목록으로 redirect"가 조건부가 되고 안내도 유실된다
+    const user = userEvent.setup()
+    const router = renderAt(['/user', '/task/5'])
+    await screen.findByRole('heading', { name: '할 일 5' })
+
+    await user.click(screen.getByRole('button', { name: /삭제/ }))
+    await user.type(screen.getByLabelText('할 일 번호'), '5')
+    await user.click(screen.getByRole('button', { name: '제출' }))
+
+    expect(router.state.location.pathname).toBe('/task')
+    expect(await screen.findByText('할 일이 삭제되었습니다')).toBeInTheDocument()
   })
 
   it('404가 아닌 실패는 다시 시도로 복구된다', async () => {
