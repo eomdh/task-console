@@ -48,9 +48,19 @@ export function TaskList() {
 
   if (isPending) {
     return (
+      // 스켈레톤은 카드와 같은 뼈대를 써서 다른 화면과 로딩 표현을 통일한다
       <div role="status" aria-label="할 일 목록 불러오는 중" className="flex flex-col gap-2">
         {[0, 1, 2, 3, 4, 5].map((index) => (
-          <div key={index} className="h-24 animate-pulse rounded-card bg-line" />
+          <div
+            key={index}
+            className="flex h-24 items-center gap-4 rounded-card border border-line bg-surface px-5"
+          >
+            <div className="h-6 w-14 shrink-0 animate-pulse rounded-lg bg-line" />
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <div className="h-6 w-40 animate-pulse rounded bg-line" />
+              <div className="h-5 w-64 animate-pulse rounded bg-line" />
+            </div>
+          </div>
         ))}
       </div>
     )

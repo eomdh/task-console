@@ -33,11 +33,18 @@ export function TaskDetail({ taskId }: TaskDetailProps) {
 
   if (isPending) {
     return (
+      // 스켈레톤은 카드와 같은 뼈대를 써서 높이가 저절로 맞게 둔다 (로딩 종료 시 화면 튐 방지)
       <div
         role="status"
         aria-label="할 일 상세 불러오는 중"
-        className="h-44 animate-pulse rounded-card bg-line"
-      />
+        className="flex flex-col gap-4 rounded-card border border-line bg-surface p-6"
+      >
+        <div className="flex flex-col gap-1">
+          <div className="h-6 w-40 animate-pulse rounded bg-line" />
+          <div className="h-4 w-32 animate-pulse rounded bg-line" />
+        </div>
+        <div className="h-5 w-64 animate-pulse rounded bg-line" />
+      </div>
     )
   }
 

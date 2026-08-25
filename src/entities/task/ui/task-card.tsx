@@ -39,7 +39,7 @@ export function TaskCard({ task }: TaskCardProps) {
         <BadgeIcon size={12} aria-hidden />
         {badge.label}
       </span>
-      <span className="flex min-w-0 flex-col gap-0.5">
+      <span className="flex min-w-0 flex-col gap-1">
         <span className="truncate text-base font-medium text-ink">{task.title}</span>
         <span className="line-clamp-2 text-sm text-ink-soft">{task.memo}</span>
       </span>
