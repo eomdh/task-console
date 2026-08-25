@@ -20,11 +20,15 @@
   --color-ink-faint: #6b7280;
 
   --color-line: #e5e7eb;
+  /* hover에서 한 단계 진해지는 구분선. line에서 그레이 스케일 한 칸 위 */
+  --color-line-strong: #d1d5db;
   --color-canvas: #f3f4f6;
   --color-surface: #ffffff;
   --color-surface-2: #f9fafb;
 
   --color-danger: #dc2626;
+  /* accent-hover와 같은 폭(스케일 한 단계)으로 어둡게. 흰 글자 대비 6.5:1 */
+  --color-danger-hover: #b91c1c;
   --color-danger-soft: #fef2f2;
   --color-good: #15803d;
   --color-good-soft: #f0fdf4;

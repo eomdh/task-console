@@ -28,7 +28,11 @@ export function TaskCard({ task }: TaskCardProps) {
   const BadgeIcon = badge.icon
 
   return (
-    <div className="flex h-24 items-center gap-4 rounded-card border border-line bg-surface px-5 transition-colors hover:bg-surface-2">
+    // 클릭 가능하다는 신호를 테두리와 배경을 함께 한 단계 내려서 준다. surface가 팔레트에서
+    // 가장 밝아 배경만으로는 변화가 거의 안 보이고, 테두리만으로도 약해 둘을 같이 움직인다.
+    // accent를 쓰지 않는 이유는 그 색이 이미 현재 페이지와 포커스를 뜻하기 때문이다.
+    // 테두리 두께는 그대로 둬야 hover마다 카드가 밀리지 않는다
+    <div className="flex h-24 items-center gap-4 rounded-card border border-line bg-surface px-5 transition-colors duration-200 hover:border-line-strong hover:bg-surface-2">
       <span
         className={`inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold ${badge.className}`}
       >
