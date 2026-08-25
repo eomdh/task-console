@@ -83,7 +83,9 @@ export function TaskList() {
   }
 
   return (
-    // pr-3은 오버레이 스크롤바가 카드 위에 뜨지 않게 하는 여백.
+    // scrollbar-gutter로 스크롤바 자리를 항상 예약한다. OS 설정(항상 표시 / 스크롤할 때만)에
+    // 따라 스크롤바가 폭을 먹기도 하고 안 먹기도 해서, 예약하지 않으면 카드 우측 끝이
+    // 다른 화면과 어긋난다.
     // tabIndex로 키보드 스크롤이 가능한 영역으로 만든다 (윈도우 밖 카드는 Tab 도달 불가)
     <div
       {...containerProps}
@@ -92,7 +94,7 @@ export function TaskList() {
       aria-label="할 일 목록 스크롤 영역"
       data-scroll-restoration-id={SCROLL_RESTORATION_ID}
       data-testid="task-scroll"
-      className="min-h-0 flex-1 overflow-y-auto pr-3"
+      className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
     >
       {/* 바깥 div가 전체 높이로 스크롤바를 만들고, 안쪽 ul이 translateY로 이동한다.
           스크롤 중 바뀌는 스타일이 transform 하나뿐이라 reflow가 없다 */}
